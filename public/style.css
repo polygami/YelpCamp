@@ -1,0 +1,28 @@
+.thumbnail {
+  
+	width: 100%;
+	
+  }
+  
+  .thumbnail img {
+	object-fit: cover;
+	object-position: center;
+	width: 100%;
+	max-width: 200%;
+	max-height: 200%;
+	height: 200px;
+	margin-bottom: 1rem;
+  }
+  
+  .campground-form {
+	width: 40%;
+	margin: 25px auto;
+  }
+  
+  .vertical-center {
+	min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+	min-height: 100vh; /* These two lines are counted as one :-)       */
+  
+	display: flex;
+	align-items: center;
+  }
