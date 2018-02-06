@@ -1,5 +1,6 @@
 .thumbnail {
 	width: 100%;
+	padding: 0;
 }
   
 .thumbnail img {
@@ -20,7 +21,9 @@
 	margin: 25px auto;
 }
 
-
+.thumbnail .caption-full {
+	padding: 9px;
+}
 
 
 .vertical-center {
