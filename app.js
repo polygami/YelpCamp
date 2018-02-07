@@ -18,6 +18,20 @@ app.use(express.static(__dirname + "/public"));
 mongoose.connect("mongodb://localhost/yelpcamp");
 // seedDB();
 
+/////////////////////////////////////////////////
+//          PASSPORT & SESSION CONFIG          //
+/////////////////////////////////////////////////
+
+app.use(require("express-session")({
+	secret: "Now are the winters of our discontent.",
+	resave: false,
+	saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 /////////////////////////////////////////////////
 //              CAMPGROUND ROUTES              //
@@ -86,10 +100,8 @@ app.get("/campgrounds/:id/comments/new", function(req, res) {
 	});
 });
 
-// NEW
 // CREATE
 app.post("/campgrounds/:id/comments", function(req, res) {
-
 	Campground.findById(req.params.id, function(err, campground){
 		if (err) {
 			console.log(err);
@@ -106,8 +118,30 @@ app.post("/campgrounds/:id/comments", function(req, res) {
 			});
 		}
 	})
-
 });
+
+/////////////////////////////////////////////////
+//                AUTH ROUTES                  //
+/////////////////////////////////////////////////
+// Show sign up form
+app.get("/register", function (req, res) {
+	console.log("request sent");
+	res.render("register");
+});
+// Handle user sign up
+app.post("/register", function (req, res) {
+	var newUser = new User({username: req.body.username});
+	User.register(newUser, req.body.password, function(err, user){
+		if (err) {
+			console.log(err);
+			return res.render("register");
+		}
+		passport.authenticate("local")(req, res, function(){
+			res.redirect("/campgrounds");
+		});
+	});
+})
+
 /////////////////////////////////////////////////
 //                   SERVER                    //
 /////////////////////////////////////////////////
