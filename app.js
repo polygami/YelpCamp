@@ -33,6 +33,13 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Define middleware to store user as a local object,
+// which can be accessed from the EJS files
+app.use(function(req, res, next){
+	res.locals.currentUser = req.user;
+	next();
+});
+
 /////////////////////////////////////////////////
 //              CAMPGROUND ROUTES              //
 /////////////////////////////////////////////////
