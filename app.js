@@ -1,16 +1,17 @@
 /////////////////////////////////////////////////
 //                    SETUP                    //
 /////////////////////////////////////////////////
-var express			= require("express"),
-	app				= express(),
-	bodyParser		= require("body-parser"),
-	mongoose		= require("mongoose"),
-	passport		= require("passport"),
-	LocalStrategy	= require("passport-local"),
-	Campground		= require("./models/campground"),
-	Comment			= require("./models/comment"),
-	User			= require("./models/user"),
-	seedDB			= require("./seeds");
+
+var express				= require("express"),
+	app					= express(),
+	bodyParser			= require("body-parser"),
+	mongoose			= require("mongoose"),
+	passport			= require("passport"),
+	LocalStrategy		= require("passport-local"),
+	Campground			= require("./models/campground"),
+	Comment				= require("./models/comment"),
+	User				= require("./models/user"),
+	seedDB				= require("./seeds");
 	
 var commentRoutes		= require("./routes/comments"),
 	campgroundRoutes	= require("./routes/campgrounds"),
@@ -20,7 +21,6 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 mongoose.connect("mongodb://localhost/yelpcamp");
-// seedDB();
 
 /////////////////////////////////////////////////
 //          PASSPORT & SESSION CONFIG          //
@@ -44,9 +44,13 @@ app.use(function(req, res, next){
 	next();
 });
 
+/////////////////////////////////////////////////
+//                   ROUTES                    //
+/////////////////////////////////////////////////
+
 app.use(indexRoutes);
-app.use(campgroundRoutes);
-app.use(commentRoutes);
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/comments", commentRoutes);
 
 /////////////////////////////////////////////////
 //                   SERVER                    //

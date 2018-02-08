@@ -1,13 +1,18 @@
+/////////////////////////////////////////////////
+//                    SETUP                    //
+/////////////////////////////////////////////////
+
 var express = require("express");
-var router = express.Router();
+var router = express.Router({mergeParams: true}); // mergeParams makes the params accessible
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
 
 /////////////////////////////////////////////////
 //                COMMENT ROUTES               //
 /////////////////////////////////////////////////
-// NEW
-router.get("/campgrounds/:id/comments/new", isLoggedIn, function(req, res) {
+
+// NEW - Shows a form to add a new comment
+router.get("/new", isLoggedIn, function(req, res) {
 	Campground.findById(req.params.id, function(err, campground) {
 		if (err) {
 			console.log("There was an error");
@@ -19,8 +24,8 @@ router.get("/campgrounds/:id/comments/new", isLoggedIn, function(req, res) {
 	});
 });
 
-// CREATE
-router.post("/campgrounds/:id/comments", isLoggedIn, function(req, res) {
+// CREATE - Adds a new comment to the database
+router.post("/", isLoggedIn, function(req, res) {
 	Campground.findById(req.params.id, function(err, campground){
 		if (err) {
 			console.log(err);
@@ -39,11 +44,20 @@ router.post("/campgrounds/:id/comments", isLoggedIn, function(req, res) {
 	});
 });
 
+/////////////////////////////////////////////////
+//                  MIDDLEWARE                 //
+/////////////////////////////////////////////////
+
+// Checks if the user is logged in
 function isLoggedIn(req, res, next){
 	if (req.isAuthenticated()){
 		return next();
 	}
 	res.redirect("/login");
 }
+
+/////////////////////////////////////////////////
+//                   EXPORTS                   //
+/////////////////////////////////////////////////
 
 module.exports = router;
