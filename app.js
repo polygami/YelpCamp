@@ -8,6 +8,7 @@ var express				= require("express"),
 	mongoose			= require("mongoose"),
 	passport			= require("passport"),
 	LocalStrategy		= require("passport-local"),
+	methodOverride		= require("method-override"),
 	Campground			= require("./models/campground"),
 	Comment				= require("./models/comment"),
 	User				= require("./models/user"),
@@ -17,10 +18,11 @@ var commentRoutes		= require("./routes/comments"),
 	campgroundRoutes	= require("./routes/campgrounds"),
 	indexRoutes			= require("./routes/index");
 
+mongoose.connect("mongodb://localhost/yelpcamp");
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
-mongoose.connect("mongodb://localhost/yelpcamp");
+app.use(methodOverride("_method"));
 
 /////////////////////////////////////////////////
 //          PASSPORT & SESSION CONFIG          //
