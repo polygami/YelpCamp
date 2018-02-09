@@ -69,12 +69,22 @@ router.get("/:id/edit", isLoggedIn, function(req, res) {
 });
 
 // UPDATE - Update a particular campground, then redirect somehwere
-router.put("/:id", isLoggedIn,  function(req, res) {
+router.put("/:id", isLoggedIn, function(req, res) {
 	Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, campground) {
 		if(err){
 			res.redirect("/campgrounds");
 		} else {
 			res.redirect("/campgrounds/" + req.params.id);
+		}
+	});
+});
+
+router.delete("/:id", isLoggedIn, function(req, res) {
+	Campground.findByIdAndRemove(req.params.id, function(err, campground){
+		if (err) {
+			res.redirect("/campgrounds");
+		} else {
+			res.redirect("/campgrounds");
 		}
 	});
 });
