@@ -6,6 +6,7 @@ var express				= require("express"),
 	app					= express(),
 	bodyParser			= require("body-parser"),
 	mongoose			= require("mongoose"),
+	flash				= require("connect-flash"),
 	passport			= require("passport"),
 	LocalStrategy		= require("passport-local"),
 	methodOverride		= require("method-override"),
@@ -20,6 +21,7 @@ var commentRoutes		= require("./routes/comments"),
 
 mongoose.connect("mongodb://localhost/yelpcamp");
 app.set("view engine", "ejs");
+app.use(flash());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
