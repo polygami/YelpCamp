@@ -62,18 +62,6 @@ router.get("/logout", function(req, res) {
 });
 
 /////////////////////////////////////////////////
-//                  MIDDLEWARE                 //
-/////////////////////////////////////////////////
-
-// Checks if the user is logged in
-function isLoggedIn(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	}
-	res.redirect("/login");
-}
-
-/////////////////////////////////////////////////
 //                   EXPORTS                   //
 /////////////////////////////////////////////////
 
