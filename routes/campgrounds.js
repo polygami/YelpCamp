@@ -58,18 +58,14 @@ router.get("/:id", function(req, res) {
 });
 
 // EDIT - Show an edit form for one campground
-router.get("/:id/edit", isLoggedIn, function(req, res) {
+router.get("/:id/edit", checkCampgroundOwnership, function(req, res) {
 	Campground.findById(req.params.id, function(err, campground) {
-		if(err){
-			res.redirect("/campgrounds");
-		} else {
-			res.render("campgrounds/edit", {campground: campground})
-		}
+		res.render("campgrounds/edit", {campground: campground});
 	});
 });
 
 // UPDATE - Update a particular campground, then redirect somehwere
-router.put("/:id", isLoggedIn, function(req, res) {
+router.put("/:id", checkCampgroundOwnership, function(req, res) {
 	Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, campground) {
 		if(err){
 			res.redirect("/campgrounds");
@@ -79,7 +75,7 @@ router.put("/:id", isLoggedIn, function(req, res) {
 	});
 });
 
-router.delete("/:id", isLoggedIn, function(req, res) {
+router.delete("/:id", checkCampgroundOwnership, function(req, res) {
 	Campground.findByIdAndRemove(req.params.id, function(err, campground){
 		if (err) {
 			res.redirect("/campgrounds");
@@ -99,7 +95,26 @@ function isLoggedIn(req, res, next){
 		return next();
 	}
 	res.redirect("/login");
-}
+};
+
+function checkCampgroundOwnership(req, res, next) {
+	if(req.isAuthenticated()) {
+		Campground.findById(req.params.id, function(err, campground) {
+			if(err){
+				res.redirect("back");
+			} else {
+				// Does the user own the campground?
+				if (campground.author.id.equals(req.user._id)) {
+					next();
+				} else {
+					res.redirect("back");
+				}
+			}
+		});
+	} else {
+		res.redirect("back");
+	}
+};
 
 /////////////////////////////////////////////////
 //                   EXPORTS                   //
