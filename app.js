@@ -45,6 +45,8 @@ passport.deserializeUser(User.deserializeUser());
 // which can be accessed from the EJS files
 app.use(function(req, res, next){
 	res.locals.currentUser = req.user;
+	res.locals.error = req.flash("error");
+	res.locals.success = req.flash("success");
 	next();
 });
 
