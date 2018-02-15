@@ -2,6 +2,8 @@
 //                    SETUP                    //
 /////////////////////////////////////////////////
 
+require('dotenv').config(); // used to set up environment variables
+
 var express				= require("express"),
 	app					= express(),
 	bodyParser			= require("body-parser"),
@@ -19,8 +21,7 @@ var commentRoutes		= require("./routes/comments"),
 	campgroundRoutes	= require("./routes/campgrounds"),
 	indexRoutes			= require("./routes/index");
 
-// mongoose.connect("mongodb://localhost/yelpcamp");
-mongoose.connect("mongodb://StandByMe:MamatiuoS@ds235328.mlab.com:35328/yelp-camp");
+mongoose.connect(process.env.DATABASE_URL || "mongodb://localhost/yelpcamp");
 app.set("view engine", "ejs");
 app.use(flash());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -63,6 +64,7 @@ app.use("/campgrounds/:id/comments", commentRoutes);
 //                   SERVER                    //
 /////////////////////////////////////////////////
 
-app.listen(process.env.PORT || 1985, process.env.IP, function () {
-	console.log('Server listening on port 1985');
+const PORT = process.env.PORT || 1985;
+app.listen(PORT, process.env.IP, function () {
+	console.log(`Server listening on port ${PORT}`);
 });
